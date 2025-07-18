@@ -2,29 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Interactive UK Tube Map</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UK Underground Map</title>
   <style>
-    body {
+    html, body {
       margin: 0;
-      background: #f9f9f9;
+      height: 100%;
+      overflow: hidden;
+      background-color: #f9f9f9;
     }
-    .map-container {
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    object {
+    #map-wrapper {
       width: 100%;
       height: 100%;
+      overflow: hidden;
+      cursor: grab;
+    }
+    #map-wrapper:active {
+      cursor: grabbing;
+    }
+    svg {
+      display: block;
+      width: auto;
+      height: auto;
     }
   </style>
 </head>
 <body>
-  <div class="map-container">
-    <object data="Test Map 1.svg" type="image/svg+xml"></object>
+  <div id="map-wrapper">
+    <object id="svgMap" data="Test Map 1.svg" type="image/svg+xml"></object>
   </div>
+
+  <!-- Panzoom library -->
+  <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
+  <script>
+    const map = document.getElementById('svgMap');
+    map.addEventListener('load', () => {
+      const innerDoc = map.contentDocument;
+      const svgElement = innerDoc.querySelector('svg');
+
+      Panzoom(svgElement, {
+        maxScale: 50,
+        minScale: 0.4,
+        contain: 'outside',
+        startScale: 1.2
+      });
+    });
+  </script>
 </body>
 </html>
